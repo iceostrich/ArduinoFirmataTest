@@ -1,4 +1,5 @@
 import time
+import pyfirmata
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -14,10 +15,13 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timer = QBasicTimer()
         self.timer.start(1000, self)
 
+        self.board = pyfirmata.Arduino('COM3')
+
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
             self.lcdNumber.display(time.strftime("%X",time.localtime()))
+            self.board.analog[1].read()
         else:
             super(WigglyWidget, self).timerEvent(event)
 
